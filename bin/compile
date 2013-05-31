@@ -54,8 +54,13 @@ echo "-----> Adding sdists"
 cd $BUILD_DIR
 cabal-dev add-source prepared-sdists/*
 
+echo "-----> Download & unpack .deb packages"
+curl -L https://launchpad.net/ubuntu/+archive/primary/+files/libgsl0-dev_1.13%2Bdfsg-1_amd64.deb > libgsl0-dev.deb
+dpkg -x libgsl0-dev.deb debs-extra
+
 echo "-----> Release the hounds! Installing application"
-cabal-dev install --disable-library-profiling --disable-executable-profiling --disable-shared
+cabal-dev install --disable-library-profiling --disable-executable-profiling --disable-shared --extra-include-dirs=$BUILD_DIR/debs-extra/usr/include --extra-lib-dirs=$BUILD_DIR/debs-extra/usr/lib
+
 
 echo "-----> Caching Cabal packages"
 echo $FIXED_HOME/.ghc
