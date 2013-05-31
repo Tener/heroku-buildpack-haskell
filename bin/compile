@@ -55,7 +55,7 @@ cd $BUILD_DIR
 cabal-dev add-source prepared-sdists/*
 
 echo "-----> Release the hounds! Installing application"
-cabal-dev install -j5 --disable-library-profiling --disable-executable-profiling --disable-shared
+cabal-dev install --disable-library-profiling --disable-executable-profiling --disable-shared
 
 echo "-----> Caching Cabal packages"
 echo $FIXED_HOME/.ghc
