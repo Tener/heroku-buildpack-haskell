@@ -78,7 +78,7 @@ echo "-----> Try hmatrix first..."
 LD_LIBRARY_PATH=$BUILD_DIR/debs-extra/usr/lib cabal-dev install hmatrix --disable-library-profiling --disable-executable-profiling --disable-shared --extra-include-dirs=$BUILD_DIR/debs-extra/usr/include --extra-lib-dirs=$BUILD_DIR/debs-extra/usr/lib
 
 echo "-----> Release the hounds! Installing application"
-cabal-dev install --disable-library-profiling --disable-executable-profiling --disable-shared --extra-include-dirs=$BUILD_DIR/debs-extra/usr/include --extra-lib-dirs=$BUILD_DIR/debs-extra/usr/lib
+LD_LIBRARY_PATH=$BUILD_DIR/debs-extra/usr/lib:$LD_LIBRARY_PATH cabal-dev install --disable-library-profiling --disable-executable-profiling --disable-shared --extra-include-dirs=$BUILD_DIR/debs-extra/usr/include --extra-lib-dirs=$BUILD_DIR/debs-extra/usr/lib
 
 
 echo "-----> Caching Cabal packages"
