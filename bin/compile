@@ -48,7 +48,7 @@ echo "-----> Updating Cabal"
 cabal update
 
 echo "-----> Installing cabal-dev"
-cabal install cabal-dev
+cabal install cabal-dev -j5
 
 echo "-----> Adding sdists"
 cd $BUILD_DIR
