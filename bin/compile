@@ -66,6 +66,6 @@ mv $FIXED_HOME/ghc $CACHE_DIR/ghc
 mv $FIXED_HOME/.ghc $CACHE_DIR/dotghc
 
 echo "Cache dir size:"
-du -ms $CACHE_DIR
+du -hs $CACHE_DIR
 echo "Build dir size:"
-du -ms $BUILD_DIR
+du -hs $BUILD_DIR
