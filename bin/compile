@@ -48,7 +48,7 @@ echo "-----> Updating Cabal"
 cabal update
 
 echo "-----> Installing cabal-dev"
-if [ ! -e $CACHE_DIR/ghc ]; then
+if [ ! -e $CACHE_DIR/cabal-dev ]; then
   cabal install cabal-dev -j5
 fi
 
