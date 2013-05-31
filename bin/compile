@@ -57,11 +57,25 @@ cd $BUILD_DIR
 cabal-dev add-source prepared-sdists/*
 
 echo "-----> Download & unpack .deb packages"
-curl -L https://launchpad.net/ubuntu/+archive/primary/+files/libgsl0-dev_1.13%2Bdfsg-1_amd64.deb > libgsl0-dev.deb
-dpkg -x libgsl0-dev.deb debs-extra
+
+getdeb() {
+    PACKAGE=`echo $1 | cut -d _ -f 1`
+    URI=`apt-cache show $PACKAGE | grep "Filename:" | cut -f 2 -d " "`
+    echo DOWNLOAD: $PACKAGE http://archive.ubuntu.com/ubuntu/$URI
+    curl -L http://archive.ubuntu.com/ubuntu/$URI --output debs/$PACKAGE.deb
+    dpkg -x debs/$PACKAGE.deb debs-extra/
+}
+
+rm -rf debs debs-extra
+mkdir debs debs-extra
+
+for pkg in libatlas3gf-base_3.6.0-24ubuntu1_amd64.deb libatlas-base-dev_3.6.0-24ubuntu1_amd64.deb libatlas-headers_3.6.0-24ubuntu1_all.deb libblas3gf_1.2-2build1_amd64.deb libblas-dev_1.2-2build1_amd64.deb libgfortran3_4.4.3-4ubuntu5.1_amd64.deb libgsl0-dev_1.13+dfsg-1_amd64.deb libgsl0ldbl_1.13+dfsg-1_amd64.deb liblapack3gf_3.2.1-2_amd64.deb liblapack-dev_3.2.1-2_amd64.deb 
+do
+    getdeb $pkg
+done
 
 echo "-----> Try hmatrix first..."
-cabal-dev install hmatrix --disable-library-profiling --disable-executable-profiling --disable-shared --extra-include-dirs=$BUILD_DIR/debs-extra/usr/include --extra-lib-dirs=$BUILD_DIR/debs-extra/usr/lib
+LD_LIBRARY_PATH=$BUILD_DIR/debs-extra/usr/lib cabal-dev install hmatrix --disable-library-profiling --disable-executable-profiling --disable-shared --extra-include-dirs=$BUILD_DIR/debs-extra/usr/include --extra-lib-dirs=$BUILD_DIR/debs-extra/usr/lib
 
 echo "-----> Release the hounds! Installing application"
 cabal-dev install --disable-library-profiling --disable-executable-profiling --disable-shared --extra-include-dirs=$BUILD_DIR/debs-extra/usr/include --extra-lib-dirs=$BUILD_DIR/debs-extra/usr/lib
