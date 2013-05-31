@@ -47,9 +47,15 @@ export PATH=$FIXED_HOME/ghc/bin:$FIXED_HOME/.cabal/bin$PATH
 echo "-----> Updating Cabal"
 cabal update
 
-echo "-----> Release the hounds! Installing application"
+echo "-----> Installing cabal-dev"
+cabal install cabal-dev
+
+echo "-----> Adding sdists"
 cd $BUILD_DIR
-cabal install -j5 --disable-library-profiling --disable-executable-profiling --disable-shared
+cabal-dev add-source prepared-sdists/*
+
+echo "-----> Release the hounds! Installing application"
+cabal-dev install -j5 --disable-library-profiling --disable-executable-profiling --disable-shared
 
 echo "-----> Caching Cabal packages"
 echo $FIXED_HOME/.ghc
