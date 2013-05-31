@@ -49,8 +49,12 @@ cabal update
 
 echo "-----> Installing cabal-dev"
 if [ ! -e $CACHE_DIR/cabal-dev ]; then
-  cabal install cabal-dev -j5
+  #cabal install cabal-dev -j5
+  CABAL_DEV_URL="https://raw.github.com/Tener/haskell-heroku-build-artifacts/master/cabal-dev"
+  curl -# --max-time 120 -L "$CABAL_DEV_URL" --output $FIXED_HOME/.cabal/bin/cabal-dev
 fi
+
+
 
 echo "-----> Adding sdists"
 cd $BUILD_DIR
