@@ -109,8 +109,8 @@ echo "-----> Caching Cabal packages & other stuff"
 echo $FIXED_HOME/.ghc
 shopt -s extglob
 rm $FIXED_HOME/.cabal/bin/!(cabal|happy)
-mv $FIXED_HOME/.cabal $CACHE_DIR/cabal
-mv $FIXED_HOME/ghc $CACHE_DIR/ghc
+cp -r $FIXED_HOME/.cabal $CACHE_DIR/cabal
+cp -r $FIXED_HOME/ghc $CACHE_DIR/ghc
 cp -r $BUILD_DIR/debs-extra $CACHE_DIR/debs-extra
 cp -r $BUILD_DIR/cabal-dev $CACHE_DIR/cabal-dev
 
