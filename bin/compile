@@ -68,7 +68,7 @@ cd $BUILD_DIR
 cabal-dev add-source prepared-sdists/*
 
 echo "-----> Download & unpack .deb packages"
-if [ -e $CACHE_DIR/debs-extra-huh ]; then
+if [ -e $CACHE_DIR/debs-extra ]; then
     echo "-----> Using debs-extra from cache"
     rm -rf $FIXED_HOME/debs-extra
     mv $CACHE_DIR/debs-extra $FIXED_HOME/debs-extra
