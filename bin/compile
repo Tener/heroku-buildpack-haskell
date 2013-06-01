@@ -7,6 +7,11 @@ set -eo pipefail
 BUILD_DIR=$1
 CACHE_DIR=$2
 
+if $BUILDPACK_CONF_PURGE_CACHE; then
+    rm -rf $CACHE_DIR
+    mkdir $CACHE_DIR
+fi
+
 FIXED_HOME=/app
 
 mkdir -p $CACHE_DIR
