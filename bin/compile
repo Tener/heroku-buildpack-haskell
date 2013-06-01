@@ -7,6 +7,8 @@ set -eo pipefail
 BUILD_DIR=$1
 CACHE_DIR=$2
 
+export
+
 if [[ $BUILDPACK_CONF_PURGE_CACHE ]]; then
     echo "-----> Cache purge requested; proceeding"
     rm -rf $CACHE_DIR
