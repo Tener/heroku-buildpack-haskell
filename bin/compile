@@ -61,20 +61,19 @@ chmod +x cabal-dev
 mv cabal-dev $FIXED_HOME/.cabal/bin/cabal-dev
 rm -rf $FIXED_HOME/.cabal/share/cabal-dev-0.9.2
 mv cabal-dev-0.9.2 $FIXED_HOME/.cabal/share/
+
+CABAL_DEV_SANDBOX=$BUILD_DIR/cabal-dev
+
 # Restore cabal-dev install database if possible... broken.
-# if [ -e $CACHE_DIR/cabal-dev ]; then
-#   echo "-----> Restored cabal-dev/ dir"
-#   cp -r $CACHE_DIR/cabal-dev/. $BUILD_DIR/cabal-dev
-#   echo "-----> ghc-pkg check"
-#   ghc-pkg check
-#   echo "-----> cabal-dev ghc-pkg check"
-#   cabal-dev ghc-pkg check
-# fi
+if [ -e $CACHE_DIR/cabal-dev ]; then
+  echo "-----> Restored cabal-dev/ dir"
+  cp -r $CACHE_DIR/cabal-dev/. $CABAL_DEV_SANDBOX
+  echo "-----> ghc-pkg check"
+  ghc-pkg check
+  echo "-----> cabal-dev ghc-pkg check"
+  cabal-dev --sandbox=$CABAL_DEV_SANDBOX ghc-pkg check
+fi
 
-
-echo "-----> Adding sdists"
-cd $BUILD_DIR
-cabal-dev add-source prepared-sdists/*
 
 echo "-----> Download & unpack .deb packages"
 if [ -e $CACHE_DIR/debs-extra/usr/libs ]; then
@@ -100,20 +99,15 @@ else
     rm -rf debs/
 fi
 
-# echo "-----> FIXED_HOME [pre]"
-# find $FIXED_HOME | grep -v vendor | grep -v buildpacks | grep -v slug-compiler
-# echo "-----> CACHE_DIR [pre]"
-# find $CACHE_DIR
-
-echo "-----> Release the hounds! Installing application"
 export LD_LIBRARY_PATH=$BUILD_DIR/debs-extra/usr/lib:$LD_LIBRARY_PATH
 
-cabal-dev install --solver=topdown --disable-library-profiling --disable-executable-profiling --disable-shared --extra-include-dirs=$BUILD_DIR/debs-extra/usr/include --extra-lib-dirs=$BUILD_DIR/debs-extra/usr/lib
+echo "-----> Adding sdists"
+cd $BUILD_DIR
+cabal-dev --sandbox=$CABAL_DEV_SANDBOX add-source prepared-sdists/*
 
-# echo "-----> FIXED_HOME [post]"
-# find $FIXED_HOME | grep -v vendor | grep -v buildpacks | grep -v slug-compiler
-# echo "-----> CACHE_DIR [post]"
-# find $CACHE_DIR
+echo "-----> Release the hounds! Installing application"
+
+cabal-dev --sandbox=$CABAL_DEV_SANDBOX install --disable-library-profiling --disable-executable-profiling --disable-shared --extra-include-dirs=$BUILD_DIR/debs-extra/usr/include --extra-lib-dirs=$BUILD_DIR/debs-extra/usr/lib
 
 echo "-----> Caching Cabal packages & other stuff"
 echo $FIXED_HOME/.ghc
@@ -127,12 +121,12 @@ rm $FIXED_HOME/.cabal/bin/!(cabal|happy)
 cp -r $FIXED_HOME/.cabal/. $CACHE_DIR/cabal
 cp -r $FIXED_HOME/ghc/. $CACHE_DIR/ghc
 cp -r $BUILD_DIR/debs-extra/. $CACHE_DIR/debs-extra
-cp -r $BUILD_DIR/cabal-dev/. $CACHE_DIR/cabal-dev
+cp -r $CABAL_DEV_SANDBOX/. $CACHE_DIR/cabal-dev
 
 echo "-----> Remove unneeded files"
-find cabal-dev -iname "*.o" -delete
-find cabal-dev -iname "*.a" -delete
-find cabal-dev -iname "*.hi" -delete
+find $CABAL_DEV_SANDBOX -iname "*.o" -delete
+find $CABAL_DEV_SANDBOX -iname "*.a" -delete
+find $CABAL_DEV_SANDBOX -iname "*.hi" -delete
 
 #echo "-----> Remove unneeded slug dirs"
 #rm -rf $FIXED_HOME/vendor/ruby* $FIXED_HOME/vendor/bundle/ruby* $FIXED_HOME/tmp/buildpacks
