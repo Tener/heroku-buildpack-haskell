@@ -59,7 +59,10 @@ mv cabal-dev-0.9.2 $FIXED_HOME/.cabal/share/
 if [ -e $CACHE_DIR/cabal-dev ]; then
   echo "-----> Restored cabal-dev/ dir"
   cp -r $CACHE_DIR/cabal-dev/. $BUILD_DIR/cabal-dev
+  echo "-----> ghc-pkg check"
   ghc-pkg check
+  echo "-----> cabal-dev ghc-pkg check"
+  cabal-dev ghc-pkg check
 fi
 
 
@@ -91,20 +94,20 @@ else
     rm -rf debs/
 fi
 
-echo "-----> FIXED_HOME [pre]"
-find $FIXED_HOME | grep -v vendor | grep -v buildpacks | grep -v slug-compiler
-echo "-----> CACHE_DIR [pre]"
-find $CACHE_DIR
+# echo "-----> FIXED_HOME [pre]"
+# find $FIXED_HOME | grep -v vendor | grep -v buildpacks | grep -v slug-compiler
+# echo "-----> CACHE_DIR [pre]"
+# find $CACHE_DIR
 
 echo "-----> Release the hounds! Installing application"
 export LD_LIBRARY_PATH=$BUILD_DIR/debs-extra/usr/lib:$LD_LIBRARY_PATH
 
 cabal-dev install --solver=topdown --disable-library-profiling --disable-executable-profiling --disable-shared --extra-include-dirs=$BUILD_DIR/debs-extra/usr/include --extra-lib-dirs=$BUILD_DIR/debs-extra/usr/lib
 
-echo "-----> FIXED_HOME [post]"
-find $FIXED_HOME | grep -v vendor | grep -v buildpacks | grep -v slug-compiler
-echo "-----> CACHE_DIR [post]"
-find $CACHE_DIR
+# echo "-----> FIXED_HOME [post]"
+# find $FIXED_HOME | grep -v vendor | grep -v buildpacks | grep -v slug-compiler
+# echo "-----> CACHE_DIR [post]"
+# find $CACHE_DIR
 
 echo "-----> Caching Cabal packages & other stuff"
 echo $FIXED_HOME/.ghc
