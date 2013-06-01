@@ -78,7 +78,7 @@ do
 done
 
 echo "-----> FIXED_HOME"
-find $FIXED_HOME
+find $FIXED_HOME | grep -v vendor | grep -v buildpacks | grep -v slug-compiler 
 echo "-----> CACHE_DIR"
 find $CACHE_DIR
 
