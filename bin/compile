@@ -96,8 +96,6 @@ find $CACHE_DIR
 
 echo "-----> Release the hounds! Installing application"
 export LD_LIBRARY_PATH=$BUILD_DIR/debs-extra/usr/lib:$LD_LIBRARY_PATH
-# wtf
-cabal install happy 
 cabal-dev install --disable-library-profiling --disable-executable-profiling --disable-shared --extra-include-dirs=$BUILD_DIR/debs-extra/usr/include --extra-lib-dirs=$BUILD_DIR/debs-extra/usr/lib
 
 echo "-----> FIXED_HOME [post]"
@@ -108,7 +106,7 @@ find $CACHE_DIR
 echo "-----> Caching Cabal packages & other stuff"
 echo $FIXED_HOME/.ghc
 shopt -s extglob
-rm $FIXED_HOME/.cabal/bin/!(cabal)
+rm $FIXED_HOME/.cabal/bin/!(cabal|happy)
 mv $FIXED_HOME/.cabal $CACHE_DIR/cabal
 mv $FIXED_HOME/ghc $CACHE_DIR/ghc
 cp -r $FIXED_HOME/debs-extra $CACHE_DIR/debs-extra
