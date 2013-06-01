@@ -66,22 +66,28 @@ cd $BUILD_DIR
 cabal-dev add-source prepared-sdists/*
 
 echo "-----> Download & unpack .deb packages"
-
-getdeb() {
-    PACKAGE=`echo $1 | cut -d _ -f 1`
-    URI=`apt-cache show $PACKAGE | grep "Filename:" | cut -f 2 -d " " | head -n 1`
-    echo DOWNLOAD: $PACKAGE http://archive.ubuntu.com/ubuntu/$URI
-    curl -# -L http://archive.ubuntu.com/ubuntu/$URI --output debs/$PACKAGE.deb
-    dpkg -x debs/$PACKAGE.deb debs-extra/
-}
-
-rm -rf debs debs-extra
-mkdir debs debs-extra
-
-for pkg in libatlas3gf-base_3.6.0-24ubuntu1_amd64.deb libatlas-base-dev_3.6.0-24ubuntu1_amd64.deb libatlas-headers_3.6.0-24ubuntu1_all.deb libblas3gf_1.2-2build1_amd64.deb libblas-dev_1.2-2build1_amd64.deb libgfortran3_4.4.3-4ubuntu5.1_amd64.deb libgsl0-dev_1.13+dfsg-1_amd64.deb libgsl0ldbl_1.13+dfsg-1_amd64.deb liblapack3gf_3.2.1-2_amd64.deb liblapack-dev_3.2.1-2_amd64.deb 
-do
-    getdeb $pkg
-done
+if [ -e $CACHE_DIR/debs-extra ]; then
+    echo "-----> Using debs-extra from cache"
+    rm -rf $FIXED_HOME/debs-extra
+    mv $CACHE_DIR/debs-extra $FIXED_HOME/debs-extra
+else
+    getdeb() {
+        PACKAGE=`echo $1 | cut -d _ -f 1`
+        URI=`apt-cache show $PACKAGE | grep "Filename:" | cut -f 2 -d " " | head -n 1`
+        echo DOWNLOAD: $PACKAGE http://archive.ubuntu.com/ubuntu/$URI
+        curl -# -L http://archive.ubuntu.com/ubuntu/$URI --output debs/$PACKAGE.deb
+        dpkg -x debs/$PACKAGE.deb debs-extra/
+    }
+     
+    rm -rf debs debs-extra
+    mkdir debs debs-extra
+     
+    for pkg in libatlas3gf-base_3.6.0-24ubuntu1_amd64.deb libatlas-base-dev_3.6.0-24ubuntu1_amd64.deb libatlas-headers_3.6.0-24ubuntu1_all.deb libblas3gf_1.2-2build1_amd64.deb libblas-dev_1.2-2build1_amd64.deb libgfortran3_4.4.3-4ubuntu5.1_amd64.deb libgsl0-dev_1.13+dfsg-1_amd64.deb libgsl0ldbl_1.13+dfsg-1_amd64.deb liblapack3gf_3.2.1-2_amd64.deb liblapack-dev_3.2.1-2_amd64.deb 
+    do
+        getdeb $pkg
+    done
+    rm -rf debs/
+fi
 
 echo "-----> FIXED_HOME [pre]"
 find $FIXED_HOME | grep -v vendor | grep -v buildpacks | grep -v slug-compiler
@@ -97,20 +103,19 @@ find $FIXED_HOME | grep -v vendor | grep -v buildpacks | grep -v slug-compiler
 echo "-----> CACHE_DIR [post]"
 find $CACHE_DIR
 
-echo "-----> Caching Cabal packages"
+echo "-----> Caching Cabal packages & other stuff"
 echo $FIXED_HOME/.ghc
 shopt -s extglob
 rm $FIXED_HOME/.cabal/bin/!(cabal)
 mv $FIXED_HOME/.cabal $CACHE_DIR/cabal
 mv $FIXED_HOME/ghc $CACHE_DIR/ghc
+cp -r $FIXED_HOME/debs-extra $CACHE_DIR/debs-extra
 cp -r $FIXED_HOME/cabal-dev $CACHE_DIR/cabal-dev
 
 echo "-----> Remove unneeded files"
 find cabal-dev -iname "*.o" -delete
 find cabal-dev -iname "*.a" -delete
 find cabal-dev -iname "*.hi" -delete
-rm -rf debs/
-rm cabal-dev/bin/*
 
 #echo "-----> Remove unneeded slug dirs"
 #rm -rf $FIXED_HOME/vendor/ruby* $FIXED_HOME/vendor/bundle/ruby* $FIXED_HOME/tmp/buildpacks
