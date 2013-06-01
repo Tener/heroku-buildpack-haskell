@@ -27,7 +27,7 @@ fi
 mv $CACHE_DIR/ghc $FIXED_HOME
 
 # Restore Cabal cache or download an empty environemt
-if [ -e $CACHE_DIR/cabal ]; then
+if [ -e $CACHE_DIR/cabal && -e $CACHE_DIR/cabal/happy ]; then
   rm -rf $FIXED_HOME/.cabal
   mv $CACHE_DIR/cabal $FIXED_HOME/.cabal
 elif [ ! -e $FIXED_HOME/.cabal ]; then
@@ -96,6 +96,7 @@ find $CACHE_DIR
 
 echo "-----> Release the hounds! Installing application"
 export LD_LIBRARY_PATH=$BUILD_DIR/debs-extra/usr/lib:$LD_LIBRARY_PATH
+
 cabal-dev install --disable-library-profiling --disable-executable-profiling --disable-shared --extra-include-dirs=$BUILD_DIR/debs-extra/usr/include --extra-lib-dirs=$BUILD_DIR/debs-extra/usr/lib
 
 echo "-----> FIXED_HOME [post]"
