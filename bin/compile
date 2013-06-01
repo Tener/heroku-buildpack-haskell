@@ -7,7 +7,7 @@ set -eo pipefail
 BUILD_DIR=$1
 CACHE_DIR=$2
 
-if $BUILDPACK_CONF_PURGE_CACHE; then
+if [[ $BUILDPACK_CONF_PURGE_CACHE ]]; then
     echo "-----> Cache purge requested; proceeding"
     rm -rf $CACHE_DIR
     mkdir $CACHE_DIR
@@ -15,7 +15,7 @@ fi
 
 FIXED_HOME=/app
 
-mkdir -p $CACHE_DIR
+mkdir -p $CACHE_DIRif $BUILDPACK_CONF_PURGE_CACHE; then
 
 if [ ! -e $CACHE_DIR/ghc ]; then
   GHC_URL="http://informatik.uni-kiel.de/~sad/ghc.tar.gz"
