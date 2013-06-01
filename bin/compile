@@ -49,10 +49,11 @@ cabal update
 
 echo "-----> Installing cabal-dev"
 #cabal install cabal-dev -j5
-CABAL_DEV_URL="https://raw.github.com/Tener/haskell-heroku-build-artifacts/master/cabal-dev"
-curl -# --max-time 120 -L "$CABAL_DEV_URL" --output $FIXED_HOME/.cabal/bin/cabal-dev
-chmod +x $FIXED_HOME/.cabal/bin/cabal-dev
-
+CABAL_DEV_URL="https://github.com/Tener/haskell-heroku-build-artifacts/raw/master/arch/cabal-dev.tgz"
+curl -# --max-time 120 -L "$CABAL_DEV_URL" | tar xvz
+chmod +x cabal-dev
+mv cabal-dev $FIXED_HOME/.cabal/bin/cabal-dev
+mv cabal-dev-0.9.2 $FIXED_HOME/.cabal/share/
 
 echo "-----> Adding sdists"
 cd $BUILD_DIR
