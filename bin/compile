@@ -97,6 +97,16 @@ shopt -s extglob
 rm $FIXED_HOME/.cabal/bin/!(cabal)
 mv $FIXED_HOME/.cabal $CACHE_DIR/cabal
 mv $FIXED_HOME/ghc $CACHE_DIR/ghc
+
+echo "-----> Remove unneeded files"
+find cabal-dev -iname "*.o" -delete
+find cabal-dev -iname "*.a" -delete
+find cabal-dev -iname "*.hi" -delete
+rm -rf debs/
+rm cabal-dev/bin/*
+
+#echo "-----> Remove unneeded slug dirs"
+#rm -rf $FIXED_HOME/vendor/ruby* $FIXED_HOME/vendor/bundle/ruby* $FIXED_HOME/tmp/buildpacks
 #mv $FIXED_HOME/.ghc $CACHE_DIR/dotghc
 
 echo "Cache dir size:"
