@@ -61,15 +61,15 @@ chmod +x cabal-dev
 mv cabal-dev $FIXED_HOME/.cabal/bin/cabal-dev
 rm -rf $FIXED_HOME/.cabal/share/cabal-dev-0.9.2
 mv cabal-dev-0.9.2 $FIXED_HOME/.cabal/share/
-# Restore cabal-dev install database if possible
-if [ -e $CACHE_DIR/cabal-dev ]; then
-  echo "-----> Restored cabal-dev/ dir"
-  cp -r $CACHE_DIR/cabal-dev/. $BUILD_DIR/cabal-dev
-  echo "-----> ghc-pkg check"
-  ghc-pkg check
-  echo "-----> cabal-dev ghc-pkg check"
-  cabal-dev ghc-pkg check
-fi
+# Restore cabal-dev install database if possible... broken.
+# if [ -e $CACHE_DIR/cabal-dev ]; then
+#   echo "-----> Restored cabal-dev/ dir"
+#   cp -r $CACHE_DIR/cabal-dev/. $BUILD_DIR/cabal-dev
+#   echo "-----> ghc-pkg check"
+#   ghc-pkg check
+#   echo "-----> cabal-dev ghc-pkg check"
+#   cabal-dev ghc-pkg check
+# fi
 
 
 echo "-----> Adding sdists"
