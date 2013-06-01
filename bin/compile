@@ -110,8 +110,8 @@ shopt -s extglob
 rm $FIXED_HOME/.cabal/bin/!(cabal|happy)
 mv $FIXED_HOME/.cabal $CACHE_DIR/cabal
 mv $FIXED_HOME/ghc $CACHE_DIR/ghc
-cp -r $FIXED_HOME/debs-extra $CACHE_DIR/debs-extra
-cp -r $FIXED_HOME/cabal-dev $CACHE_DIR/cabal-dev
+cp -r $BUILD_DIR/debs-extra $CACHE_DIR/debs-extra
+cp -r $BUILD_DIR/cabal-dev $CACHE_DIR/cabal-dev
 
 echo "-----> Remove unneeded files"
 find cabal-dev -iname "*.o" -delete
