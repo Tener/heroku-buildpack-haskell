@@ -8,6 +8,7 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 
 if $BUILDPACK_CONF_PURGE_CACHE; then
+    echo "-----> Cache purge requested; proceeding"
     rm -rf $CACHE_DIR
     mkdir $CACHE_DIR
 fi
