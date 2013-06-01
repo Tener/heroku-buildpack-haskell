@@ -77,15 +77,19 @@ do
     getdeb $pkg
 done
 
-echo "-----> FIXED_HOME"
-find $FIXED_HOME | grep -v vendor | grep -v buildpacks | grep -v slug-compiler 
-echo "-----> CACHE_DIR"
+echo "-----> FIXED_HOME [pre]"
+find $FIXED_HOME | grep -v vendor | grep -v buildpacks | grep -v slug-compiler
+echo "-----> CACHE_DIR [pre]"
 find $CACHE_DIR
 
 echo "-----> Release the hounds! Installing application"
 export LD_LIBRARY_PATH=$BUILD_DIR/debs-extra/usr/lib:$LD_LIBRARY_PATH
 cabal-dev install --disable-library-profiling --disable-executable-profiling --disable-shared --extra-include-dirs=$BUILD_DIR/debs-extra/usr/include --extra-lib-dirs=$BUILD_DIR/debs-extra/usr/lib
 
+echo "-----> FIXED_HOME [post]"
+find $FIXED_HOME | grep -v vendor | grep -v buildpacks | grep -v slug-compiler
+echo "-----> CACHE_DIR [post]"
+find $CACHE_DIR
 
 echo "-----> Caching Cabal packages"
 echo $FIXED_HOME/.ghc
