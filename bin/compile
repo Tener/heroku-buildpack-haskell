@@ -96,6 +96,8 @@ find $CACHE_DIR
 
 echo "-----> Release the hounds! Installing application"
 export LD_LIBRARY_PATH=$BUILD_DIR/debs-extra/usr/lib:$LD_LIBRARY_PATH
+# wtf
+cabal install happy 
 cabal-dev install --disable-library-profiling --disable-executable-profiling --disable-shared --extra-include-dirs=$BUILD_DIR/debs-extra/usr/include --extra-lib-dirs=$BUILD_DIR/debs-extra/usr/lib
 
 echo "-----> FIXED_HOME [post]"
