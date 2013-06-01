@@ -15,7 +15,7 @@ fi
 
 FIXED_HOME=/app
 
-mkdir -p $CACHE_DIRif $BUILDPACK_CONF_PURGE_CACHE; then
+mkdir -p $CACHE_DIR
 
 if [ ! -e $CACHE_DIR/ghc ]; then
   GHC_URL="http://informatik.uni-kiel.de/~sad/ghc.tar.gz"
