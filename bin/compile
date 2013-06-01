@@ -57,7 +57,8 @@ rm -rf $FIXED_HOME/.cabal/share/cabal-dev-0.9.2
 mv cabal-dev-0.9.2 $FIXED_HOME/.cabal/share/
 # Restore cabal-dev install database if possible
 if [ -e $CACHE_DIR/cabal-dev ]; then
-  mv $CACHE_DIR/cabal-dev $FIXED_HOME/cabal-dev
+  echo "-----> Restored cabal-dev/ dir"
+  mv $CACHE_DIR/cabal-dev $BUILD_DIR/cabal-dev
 fi
 
 
