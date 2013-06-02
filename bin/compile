@@ -7,11 +7,14 @@ set -eo pipefail
 BUILD_DIR=$1
 CACHE_DIR=$2
 
+. hooks/start.sh
+
 echo "-----> export:"
 export
 
 echo "-----> set:"
 set
+
 
 if [[ $BUILDPACK_CONF_PURGE_CACHE ]]; then
     echo "-----> Cache purge requested; proceeding"
@@ -113,6 +116,8 @@ cabal-dev --sandbox=$CABAL_DEV_SANDBOX add-source prepared-sdists/*
 
 echo "-----> Release the hounds! Installing application"
 
+. hooks/build.sh
+
 cabal-dev --sandbox=$CABAL_DEV_SANDBOX install --disable-library-profiling --disable-executable-profiling --disable-shared --extra-include-dirs=$BUILD_DIR/debs-extra/usr/include --extra-lib-dirs=$BUILD_DIR/debs-extra/usr/lib
 
 echo "-----> Caching Cabal packages & other stuff"
@@ -142,3 +147,5 @@ echo "Cache dir size:"
 du -hs $CACHE_DIR
 echo "Build dir size:"
 du -hs $BUILD_DIR
+
+. hooks/finish.sh
