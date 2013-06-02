@@ -86,19 +86,19 @@ fi
 echo "-----> Download & unpack .deb packages"
 if [ -e $CACHE_DIR/debs-extra/usr/libs ]; then
     echo "-----> Using debs-extra from cache"
-    rm -rf $FIXED_HOME/debs-extra
-    mv $CACHE_DIR/debs-extra $FIXED_HOME/debs-extra
+    rm -rf $BUILD_DIR/debs-extra
+    mv $CACHE_DIR/debs-extra $BUILD_DIR/debs-extra
 else
     getdeb() {
         PACKAGE=`echo $1 | cut -d _ -f 1`
         URI=`apt-cache show $PACKAGE | grep "Filename:" | cut -f 2 -d " " | head -n 1`
         echo DOWNLOAD: $PACKAGE http://archive.ubuntu.com/ubuntu/$URI
         curl -# -L http://archive.ubuntu.com/ubuntu/$URI --output debs/$PACKAGE.deb
-        dpkg -x debs/$PACKAGE.deb debs-extra/
+        dpkg -x debs/$PACKAGE.deb $BUILD_DIR/debs-extra/
     }
      
-    rm -rf debs debs-extra
-    mkdir debs debs-extra
+    rm -rf debs $BUILD_DIR/debs-extra
+    mkdir debs $BUILD_DIR/debs-extra
      
     for pkg in libatlas3gf-base_3.6.0-24ubuntu1_amd64.deb libatlas-base-dev_3.6.0-24ubuntu1_amd64.deb libatlas-headers_3.6.0-24ubuntu1_all.deb libblas3gf_1.2-2build1_amd64.deb libblas-dev_1.2-2build1_amd64.deb libgfortran3_4.4.3-4ubuntu5.1_amd64.deb libgsl0-dev_1.13+dfsg-1_amd64.deb libgsl0ldbl_1.13+dfsg-1_amd64.deb liblapack3gf_3.2.1-2_amd64.deb liblapack-dev_3.2.1-2_amd64.deb 
     do
