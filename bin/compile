@@ -6,6 +6,7 @@ set -eo pipefail
 
 BUILD_DIR=$1
 CACHE_DIR=$2
+CABAL_DEV_SANDBOX=$FIXED_HOME/cabal-dev
 
 . $BUILD_DIR/hooks/start.sh
 
@@ -70,8 +71,6 @@ chmod +x cabal-dev
 mv cabal-dev $FIXED_HOME/.cabal/bin/cabal-dev
 rm -rf $FIXED_HOME/.cabal/share/cabal-dev-0.9.2
 mv cabal-dev-0.9.2 $FIXED_HOME/.cabal/share/
-
-CABAL_DEV_SANDBOX=$BUILD_DIR/cabal-dev
 
 # Restore cabal-dev install database if possible... broken.
 if [ -e $CACHE_DIR/cabal-dev ]; then
