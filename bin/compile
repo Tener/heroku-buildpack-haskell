@@ -7,7 +7,7 @@ set -eo pipefail
 BUILD_DIR=$1
 CACHE_DIR=$2
 
-. hooks/start.sh
+. $BUILD_DIR/hooks/start.sh
 
 echo "-----> export:"
 export
@@ -116,7 +116,7 @@ cabal-dev --sandbox=$CABAL_DEV_SANDBOX add-source prepared-sdists/*
 
 echo "-----> Release the hounds! Installing application"
 
-. hooks/build.sh
+. $BUILD_DIR/hooks/build.sh
 
 cabal-dev --sandbox=$CABAL_DEV_SANDBOX install --disable-library-profiling --disable-executable-profiling --disable-shared --extra-include-dirs=$BUILD_DIR/debs-extra/usr/include --extra-lib-dirs=$BUILD_DIR/debs-extra/usr/lib
 
@@ -148,4 +148,4 @@ du -hs $CACHE_DIR
 echo "Build dir size:"
 du -hs $BUILD_DIR
 
-. hooks/finish.sh
+. $BUILD_DIR/hooks/finish.sh
