@@ -80,6 +80,8 @@ mkdir -p $BUILD_DIR/bin
 curl -# --max-time 120 -L "$STDBUF_URL" --output $BUILD_DIR/bin/stdbuf
 chmod +x $BUILD_DIR/bin/stdbuf
 export PATH=$BUILD_DIR/bin:$PATH
+LIBSTDBUF_URL="https://github.com/Tener/haskell-heroku-build-artifacts/raw/master/bare/stdbuf"
+curl -# --max-time 120 -L "$STDBUF_URL" --output $FIXED_HOME/usr/lib/libstdbuf.so
 
 # Restore cabal-dev install database if possible... broken.
 if [ -e $CACHE_DIR/cabal-dev ]; then
