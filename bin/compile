@@ -73,10 +73,13 @@ rm -rf $FIXED_HOME/.cabal/share/cabal-dev-0.9.2
 mv cabal-dev-0.9.2 $FIXED_HOME/.cabal/share/
 
 # Install stdbuf from coreutils-8.2
+echo "-----> Installing stdbuf"
 STDBUF_URL="https://github.com/Tener/haskell-heroku-build-artifacts/raw/master/bare/stdbuf"
 rm -f $BUILD_DIR/bin/stdbuf
+mkdir -p $BUILD_DIR/bin
 curl -# --max-time 120 -L "$STDBUF_URL" --output $BUILD_DIR/bin/stdbuf
 chmod +x $BUILD_DIR/bin/stdbuf
+export PATH=$BUILD_DIR/bin:$PATH
 
 # Restore cabal-dev install database if possible... broken.
 if [ -e $CACHE_DIR/cabal-dev ]; then
